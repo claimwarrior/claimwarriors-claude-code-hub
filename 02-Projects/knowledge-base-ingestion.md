@@ -7,76 +7,111 @@
 
 ## What It Does
 
-Teaches Claude everything about Claim Warriors by ingesting all available data: contracts, call recordings, transcripts, and operational knowledge. This creates the foundation that every future AI agent draws from.
+Teaches Claude everything about Claim Warriors by extracting patterns from 788+ completed contracts and their call recordings. Creates the foundation that every future AI agent draws from.
 
 ## Why It's Critical
 
 Jo's core directive: "Teach Claude what this business is. Once we have that understanding, then we can build everything else."
 
-Without business context, AI agents produce generic output. With 788+ contracts and thousands of call recordings worth of context, agents produce claim-type-specific, operationally relevant output.
+Without business context, AI agents produce generic output. With patterns extracted from hundreds of real calls, agents produce scripts grounded in what actually worked.
 
 ## Data Sources
 
 ### Completed Contracts (788+)
 - Location: GHL -> Payments -> All Documents -> Contracts -> Completed
 - Contains: Customer info, claim type, claim value, contract terms
-- Access: Navigate to each customer, view their full record
+- Access: GHL MCP or GHL API
 
 ### Call Recordings
-- Location: Under each customer in GHL (hover over customer name -> click -> calls)
-- Volume: Multiple calls per customer, some with 5+ calls
-- Intake calls: Usually first call over 5 minutes
-- Quality: GHL's built-in transcription is "garbage" -- need Whisper or better transcriber
-- Approach: Identify intake calls (first substantive call per customer)
+- Location: Under each customer in GHL
+- Volume: Multiple calls per customer, focus on substantive calls (5+ minutes)
+- Quality: GHL's built-in transcription is too low quality -- need Whisper or Groq
+- Key insight: All 788 contracts are COMPLETED deals, so all calls are inherently "successful"
 
 ### Unsigned Leads (~796)
 - Location: GHL -> Payments -> Contracts -> Not Signed
-- Future use: Outreach bot data. Not needed for Phase 1 but should be noted
+- Future use: Outreach bot data. Not needed for Phase 1
 
-### Fireflies Recordings
-- Location: Fireflies MCP
-- Contains: Strategy calls between Ben and Jo
-- Use: Understanding business context, priorities, operational challenges
+## Extraction Pipeline
 
-## Ingestion Strategy
+Based on expert advice (Mark Kashef, Matthew Snow -- Early AI-dopters community). Revised from original approach.
 
-### Step 1: Structured Data
-- Pull all completed contract data from GHL via MCP
-- Categorize by claim type (water, fire, roof, misc) and status (denied, underpaid, new)
-- Store structured knowledge in this Obsidian vault
+### Step 1: Extract Audio
+- Pull call recordings from GHL via API
+- Focus on intake calls (first substantive call per customer, 5+ minutes)
+- Skip missed calls, voicemails, sub-minute callbacks
 
-### Step 2: Call Transcripts
-- For each completed contract, pull the call recording
-- Transcribe using Whisper (better quality than GHL's transcriber)
-- Feed transcripts to Claude organized by claim type
-- Extract: sales patterns, objections, customer language, key qualification questions
+### Step 2: Transcribe
+- Use Whisper-based transcription or Groq's free tier
+- NOT GHL's built-in transcriber (too many errors)
+- Output: clean text transcripts per call
 
-### Step 3: Knowledge Synthesis
-- Claude analyzes all data and produces:
-  - Intake scripts per claim type + status (9 combinations)
-  - Qualification criteria per claim type
-  - Common objections and responses
-  - Red flags that indicate a garbage claim
-  - Patterns in successful vs. failed claims
+### Step 3: Define Extraction Rubric
+- No manual labeling of individual calls needed (all are successful deals)
+- Define WHAT patterns to mine for:
+  - Every objection raised and how it was handled
+  - Every qualification question asked and when in the call
+  - Every close attempt and what led to it
+  - Every opener and customer response
+  - Claim type identification and type-specific details
+  - Red flags mentioned (old claims, low value, prior adjusters)
+  - Information collection patterns (what fields, what order)
+  - Customer emotional state and how rep responded
 
-### Step 4: Store in Vault
-- Generated scripts go in [[../04-Scripts/_index|04-Scripts]]
-- Qualification criteria and patterns go in [[../00-Company/claim-types|claim-types]]
-- Everything feeds back into this vault as permanent reference
+### Step 4: Batch Process with Gemini Flash
+- Batch 20-30 transcripts at a time
+- Gemini Flash: cheap, 1M context window
+- Prompt: "Given this rubric, extract every instance of [pattern]"
+- Mine for specific patterns, NOT generic summaries
+- Save Claude tokens for synthesis -- Gemini handles the bulk extraction
+
+### Step 5: Synthesis with Claude
+- Take all extracted patterns from Gemini batches
+- Distill into:
+  - Conversation archetypes (expected: 4-6 distinct types)
+  - Recurring objection/response pairs (expected: 10-15)
+  - Qualification patterns per claim type
+  - Few-shot examples from real calls
+- Claude's reasoning quality matters here -- this is where the intelligence happens
+
+### Step 6: Generate Outputs
+- 2 intake scripts (denied + new/underpaid) with claim-type branches
+- Qualification criteria per claim type
+- Rating system framework
+- Operational improvement recommendations
+- Nurture content per claim type
+- All grounded in real patterns, with few-shot examples embedded
+
+## Why Not Manual Labeling?
+
+Mark Kashef and Matthew Snow recommended labeling 20-30% of calls before processing. We're skipping this because:
+1. All 788 contracts are completed deals -- they're all "successful" calls
+2. We define the rubric (what to extract) without needing per-call labels
+3. Jo IS the feedback loop -- he'll review scripts and iterate
+4. Labeling 150+ calls would delay delivery by days for marginal first-draft improvement
+
+## Why Gemini Flash, Not Claude, for Extraction?
+
+- Gemini Flash: $0.075/1M input tokens, 1M context window
+- Claude: $3/1M input tokens, 200k context window
+- Extraction is pattern matching, not complex reasoning
+- Save Claude for the synthesis pass where reasoning quality actually matters
+- 40x cost difference for the bulk processing step
 
 ## Challenges
 
-- **Volume**: 788 contracts x multiple calls each = potentially thousands of recordings
-- **Quality**: GHL transcripts are low quality, need re-transcription
-- **Token management**: Can't feed everything into one context window. Need chunking strategy
-- **Time**: Ben estimated 2-3 days to build the ingestion pipeline and have initial results
+- **Volume**: 788 contracts x multiple calls = potentially thousands of recordings
+- **Audio extraction**: Need to figure out GHL API call recording access
+- **Transcription cost/time**: Large volume, need efficient pipeline
+- **Gemini Flash prompt engineering**: Rubric needs to be precise to get useful extractions
 
 ## Timeline
 
-- **Target**: Thursday March 27, 2026 -- knowledge base learned, first scripts generated
-- **Jo's request**: Scripts ready for review by Thursday so she can give feedback
+- **Original target**: Thursday March 27, 2026
+- **Revised**: Pipeline needs to be built first. Realistic: extraction pipeline this week, first script outputs early next week
 
 ## Source
 
-- Ben/Jo call, March 24 2026 -- "AI Next Steps" (extensive discussion)
+- Ben/Jo call, March 24 2026 -- "AI Next Steps"
 - Ben/Jo call, March 25 2026 -- confirmed priority
+- Mark Kashef & Matthew Snow -- pipeline methodology (Early AI-dopters, March 2026)

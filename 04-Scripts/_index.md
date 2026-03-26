@@ -4,55 +4,52 @@ This folder contains AI-generated intake and communication scripts for Claim War
 
 ## How Scripts Are Generated
 
-1. The knowledge base is built from 788+ completed contracts and their call recordings (see [[../02-Projects/knowledge-base-ingestion]])
-2. Claude analyzes the data, organized by claim type and status
-3. Scripts are generated for each combination of claim type + claim status
-4. Jo reviews each script and provides feedback
-5. Approved scripts are used by AI agents (intake bot, outreach bot) and human reps
+1. Call recordings are extracted from GHL (788+ completed contracts)
+2. Transcribed with Whisper or Groq (not GHL's built-in transcriber)
+3. Batched through Gemini Flash (20-30 transcripts per batch) to mine specific patterns against a defined rubric
+4. Claude synthesizes extracted patterns into archetypes, objection/response pairs, and few-shot examples
+5. Scripts are generated grounded in real CW call patterns
+6. Jo reviews each script and provides feedback
+7. Approved scripts are used by AI agents (intake bot, outreach bot) and human reps
 
-## Script Matrix
+## Script Structure
 
-| | Water | Roof | Fire | Misc |
-|---|---|---|---|---|
-| **Denied** | TBD | TBD | TBD | TBD |
-| **Underpaid** | TBD | TBD | TBD | TBD |
-| **New** | TBD | TBD | TBD | TBD |
+Two intake scripts, each with claim-type-specific branches:
 
-Each cell will become a script file in this folder once generated.
+### Script A: Denied Claim Intake
+For customers whose insurance company has denied their claim. Covers:
+- Acknowledging frustration, assessing if denial is worth fighting
+- Denied-claim-specific qualification questions
+- Objection handling for denied scenarios
+- Claim-type branches (water/fire/roof/misc) for type-specific details and red flags
 
-## Script Types
+**File**: `intake-denied.md` (TBD -- pending knowledge base completion)
 
-### Intake Scripts
-Used by the AI intake bot and human reps during the first call with a customer. Cover:
-- Greeting and introduction
-- Qualification questions
-- Claim-type-specific probing questions
-- Objection handling
-- Transition to contract discussion
+### Script B: New or Underpaid Claim Intake
+For customers with a fresh claim or insurance underpayment. Covers:
+- Assessing the gap between payout and actual damage value
+- New/underpaid-specific qualification questions
+- Objection handling for underpayment scenarios
+- Claim-type branches (water/fire/roof/misc) for type-specific details and red flags
+
+**File**: `intake-new-underpaid.md` (TBD -- pending knowledge base completion)
+
+## Why Two Scripts, Not Nine
+
+The claim STATUS (denied vs. new/underpaid) drives the conversation structure -- the customer's emotional state, objections, and qualification path are fundamentally different. The claim TYPE (water, fire, roof, misc) adds context within each script but doesn't change the core flow. Separate sections inside each script handle type-specific details.
+
+## Additional Script Types (Future)
 
 ### Nurture Scripts
-Used for follow-up when a customer doesn't sign on the first call. Personalized by claim type:
-- Claim-specific information (why water damage claims are commonly underpaid, etc.)
-- Social proof (reviews, success stories)
-- Urgency triggers
-- Re-engagement messaging
+Claim-type-specific follow-up sequences for customers who don't sign on the first call. See Deliverable 7 in the [[../01-AI-Strategy/implementation-plan|implementation plan]].
 
-### Outreach Scripts (Future)
-Used by the denied claims outreach bot to re-contact unsigned leads. Different tone -- re-engagement rather than first contact.
-
-## Naming Convention
-
-Scripts will be named: `{type}-{claim-type}-{claim-status}.md`
-
-Example: `intake-water-denied.md`, `nurture-roof-underpaid.md`
+### Outreach Scripts
+For the denied claims outreach bot to re-contact ~796 unsigned leads. Different tone -- re-engagement, not first contact.
 
 ## Status
 
 **Not yet generated.** Waiting on:
-- [ ] Knowledge base ingestion (Phase 1)
-- [ ] Jo's list of what scripts she wants first
-- [ ] Jo's review and approval process
-
-## Source
-
-Script strategy from Ben/Jo calls March 24-25 2026.
+- [ ] Knowledge base ingestion (Deliverable 1)
+- [ ] Pattern extraction pipeline (Gemini Flash batches)
+- [ ] Claude synthesis pass
+- [ ] Jo's review and feedback

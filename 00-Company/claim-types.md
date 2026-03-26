@@ -42,24 +42,25 @@
 - Sales pitch: "Your claim is worth $X but they only paid you $Y -- we'll fight for the difference"
 - Requires showing the gap between payment and actual value
 
-## Why This Matters for AI
+## How This Maps to AI Deliverables
 
-Each claim type + status combination needs:
-1. A specific **intake script** (how the AI talks to the customer)
-2. A specific **nurture sequence** (follow-up messaging if they don't sign)
-3. Different **qualification criteria** (what makes it worth pursuing)
-4. Different **back office workflow** (what the team needs to do)
+Claim types serve as the **knowledge layer** -- they add context and specificity to everything the AI produces. But they don't each get their own script.
 
-The goal is for Claude to learn from 788+ completed contracts and generate scripts per combination:
-- Denied + Water
-- Denied + Roof
-- Denied + Fire
-- Underpaid + Water
-- Underpaid + Roof
-- Underpaid + Fire
-- New + Water
-- New + Roof
-- New + Fire
+**Scripts are driven by claim STATUS** (denied vs. new/underpaid):
+- 2 intake scripts, each with claim-type-specific branches inside
+- The customer's emotional state and objection patterns differ by status, not by type
+- See [[../04-Scripts/_index]] for script structure
+
+**Claim types add context WITHIN each script:**
+- Type-specific qualification questions (water has different red flags than roof)
+- Type-specific objection handling (denial reasons differ by claim type)
+- Type-specific nurture content (water customers get water-specific follow-up)
+- Type-specific playbooks for back office
+
+**Claim types also drive:**
+- Qualification criteria per type (what makes a water claim garbage vs. valuable)
+- Nurture content per type (educational content, urgency triggers)
+- Back office playbooks per type (negotiation approach, documentation needs)
 
 ## Source
 

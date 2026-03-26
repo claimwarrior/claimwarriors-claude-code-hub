@@ -4,12 +4,13 @@
 
 **Status**: In progress (March 2026)
 
-### Build the Knowledge Base
-- [ ] Ingest 788+ completed contracts from GHL (payments -> completed -> customer -> calls)
-- [ ] Transcribe call recordings using Whisper (GHL's built-in transcriber is too low quality)
-- [ ] Feed all data to Claude to learn about Claim Warriors' business
-- [ ] Separate knowledge by claim type (water, roof, fire, misc) and claim status (denied, underpaid, new)
-- [ ] Build this Obsidian vault as the structured reference layer
+### Build the Knowledge Base (Extraction Pipeline)
+- [ ] Extract call recordings from GHL API (focus on 5+ minute substantive calls)
+- [ ] Transcribe with Whisper or Groq (not GHL's built-in transcriber)
+- [ ] Define extraction rubric (objections, qualifications, closes, openers, red flags)
+- [ ] Batch process 20-30 transcripts at a time through Gemini Flash
+- [ ] Claude synthesis pass -- distill patterns into archetypes and few-shot examples
+- [ ] Store structured knowledge in this Obsidian vault
 
 ### Connect MCP Integrations
 - [ ] GHL MCP -- read/write contacts, opportunities, conversations, custom fields
@@ -47,7 +48,7 @@
 - [ ] After customer signs contract, push summary as first comment to Claim Warriors software
 
 ### Script Generation
-- [ ] Generate intake scripts per claim type + status combination (9 combinations)
+- [ ] Generate 2 intake scripts (denied + new/underpaid) with claim-type branches
 - [ ] Jo reviews and provides feedback
 - [ ] Iterate scripts based on feedback
 
