@@ -17,7 +17,10 @@ This folder contains AI-generated intake and communication scripts for Claim War
 Two intake scripts, each with claim-type-specific branches:
 
 ### Script A: Denied Claim Intake
-For customers whose insurance company has denied their claim. Covers:
+Handed off to: Low-Level Rep ($10-$12/hr)
+Goal: Sign at 15%-20%
+
+For customers whose insurance company has denied their claim. The more transactional path. Covers:
 - Acknowledging frustration, assessing if denial is worth fighting
 - Denied-claim-specific qualification questions
 - Objection handling for denied scenarios
@@ -26,8 +29,12 @@ For customers whose insurance company has denied their claim. Covers:
 **File**: `intake-denied.md` (TBD -- pending knowledge base completion)
 
 ### Script B: New or Underpaid Claim Intake
-For customers with a fresh claim or insurance underpayment. Covers:
+Handed off to: Sam / Account Manager ($25/hr)
+Goal: Sign claim + sales valuation
+
+For customers with a fresh claim or insurance underpayment. The more complex path -- requires assessing claim value and building a case for CW involvement. Covers:
 - Assessing the gap between payout and actual damage value
+- Performing sales valuation (what is CW's potential fee?)
 - New/underpaid-specific qualification questions
 - Objection handling for underpayment scenarios
 - Claim-type branches (water/fire/roof/misc) for type-specific details and red flags

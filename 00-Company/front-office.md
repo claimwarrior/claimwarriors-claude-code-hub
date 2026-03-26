@@ -10,10 +10,30 @@
 5. After call: ChatGPT generates a summary via GHL automation (workflow 851/852/853)
 6. If customer signs, data flows from GHL to Airtable to Claim Warriors software (Supabase)
 
-### Custom Fields Collected During Sales Call
-- Customer first name, last name, contact info
-- Type of loss (water, fire, roof, misc)
-- Claim status (denied, underpaid, new)
+### Step 2: Initial Intake / Pre-Qualification
+
+Owner: AI or Low-Level Sales Rep
+
+This is the first structured interaction with a new lead. The goal is to collect baseline information and route the customer to the right person based on claim stage.
+
+**Data collected during pre-qualification:**
+- Customer first name, last name, contact info (phone, email)
+- Address
+- Homeowner vs. Renter (hard disqualifier -- renters typically can't file property insurance claims)
+- Type of damage (water, fire, roof, misc)
+- Date of loss
+- Claim stage (denied, new, underpaid)
+
+**After pre-qualification, route by claim stage:**
+
+| Path | Owner | Pay | Goal |
+|------|-------|-----|------|
+| Denied claim | Low-Level Rep | $10-$12/hr | Sign at 15%-20% |
+| New / Underpaid claim | Sam / Account Manager | $25/hr | Sign claim + sales valuation |
+
+The denied path is more transactional -- get the signature at a set rate. The new/underpaid path requires actual sales skill -- the rep needs to assess what the claim is worth and build a case for why CW should take it on, which is why it goes to a higher-paid Account Manager.
+
+### Additional Fields Collected During Full Sales Call
 - Customer's estimated claim value (e.g., $100k)
 - Amount already paid by insurance (e.g., $10k)
 - Remaining amount (e.g., $90k)
@@ -28,6 +48,7 @@
 - No AI pre-qualification -- garbage claims slip through to back office
 - GHL's built-in transcriber is "garbage" -- too many errors to be useful
 - Voicemail calls get billed by AI calling tools
+- No homeowner vs. renter check -- renters slip through and waste time
 
 ### IVR / Call Routing
 - GHL has an IVR automation that rings all available reps

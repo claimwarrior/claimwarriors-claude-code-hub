@@ -90,7 +90,10 @@ Based on expert advice from Mark Kashef and Matthew Snow (Early AI-dopters commu
 Jo needs two intake scripts, not nine. The claim status drives the conversation -- a denied claim customer is in a completely different emotional state than someone with a new claim. The claim type (water, fire, roof, misc) adds specific context within each script, but doesn't change the fundamental conversation structure.
 
 **Script A: Denied Claim Intake**
-For customers whose insurance company has already denied their claim. These customers are frustrated, skeptical, and often desperate. The conversation needs to:
+Handed off to: Low-Level Rep ($10-$12/hr)
+Goal: Sign at 15%-20%
+
+For customers whose insurance company has already denied their claim. These customers are frustrated, skeptical, and often desperate. This is the more transactional path -- the rep's job is to get the signature at a set rate. The conversation needs to:
 - Acknowledge their frustration without being sycophantic
 - Quickly assess if the denial is worth fighting (not all are)
 - Collect specific information about the denial (reason, timeline, what they've tried)
@@ -99,9 +102,13 @@ For customers whose insurance company has already denied their claim. These cust
 - Adapt qualification and red flags based on claim type (water denial has different patterns than roof denial)
 
 **Script B: New or Underpaid Claim Intake**
-For customers with a fresh claim or one where insurance paid too little. These customers are anxious, confused, or angry about being shortchanged. The conversation needs to:
+Handed off to: Sam / Account Manager ($25/hr)
+Goal: Sign claim + sales valuation
+
+For customers with a fresh claim or one where insurance paid too little. This is the more complex path -- the Account Manager needs to assess what the claim is actually worth and build a case for CW's involvement, which is why it goes to a higher-skill, higher-paid rep. The conversation needs to:
 - Assess the gap between what they got and what the damage is actually worth
 - Qualify whether the gap is large enough to justify CW's involvement
+- Perform a sales valuation -- what is CW's potential fee on this claim?
 - Collect damage details and insurance response information
 - Explain CW's value proposition (we fight for the difference)
 - Handle objections specific to new/underpaid ("my insurance company said this is all they'll pay", "how much do you charge?", "I already have a contractor estimate")
@@ -134,7 +141,9 @@ What Claude needs to identify:
 
 1. **Early warning signals** -- What does a customer say during intake that correlates with a garbage claim? Phrases, amounts, timelines, situations
 2. **Claim value predictors** -- What factors predict whether a claim is worth $100k or $10k? Description of damage, time since loss, insurance company, policy type
-3. **Disqualification criteria** -- Hard rules per claim type: if X is true, don't take it
+3. **Disqualification criteria** -- Hard rules: if X is true, don't take it. Known hard disqualifiers include:
+   - Renter (not homeowner) -- can't file property insurance claims
+   - Additional per-claim-type rules TBD from call analysis
 4. **Soft warnings** -- Yellow flags: inflated damage, multiple prior adjusters, insurance already made final offer
 
 ### What Done Looks Like
