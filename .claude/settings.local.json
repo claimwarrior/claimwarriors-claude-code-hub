@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__fireflies-claim-warrior__fireflies_search",
+      "mcp__airtable-claim-warrior__list_bases",
+      "mcp__n8n-claim-warrior__n8n_health_check",
+      "mcp__n8n-claim-warrior__n8n_list_workflows",
+      "mcp__airtable-claim-warrior__list_tables"
+    ]
+  }
+}
