@@ -185,6 +185,7 @@
   },
   "active": "77772089dc72ee04",
   "lastOpenFiles": [
+    "01-AI-Strategy/implementation-plan.md",
     "CLAUDE.md",
     "06-Meeting-Notes/2026-03-25-ben-jo-ai-implementation-details.md",
     "06-Meeting-Notes/2026-03-24-ben-jo-ai-next-steps.md",
@@ -210,7 +211,6 @@
     "00-Company/front-office.md",
     "00-Company/tools-and-platforms.md",
     "02-Projects/knowledge-base-ingestion.md",
-    "02-Projects/call-summary-workflow.md",
     "06-Meeting-Notes",
     "05-Decisions",
     "04-Scripts",
