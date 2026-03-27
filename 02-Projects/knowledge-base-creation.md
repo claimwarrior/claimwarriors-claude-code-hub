@@ -15,7 +15,7 @@ This is the operational runbook. A fresh Claude Code session should be able to r
 - Python: `C:\Users\benelk\AppData\Local\Programs\Python\Python312\python.exe`
 - Scripts: `C:\Users\benelk\Documents\claimwarriors-claude-code-hub\src\`
 - Env file: `C:\Users\benelk\Documents\claudeclaw\.env`
-- Required env vars: `CLAIM_WARRIOR_GHL_API_KEY`, `GROQ_API_KEY`
+- Required env vars: `CLAIM_WARRIOR_GHL_API_KEY`, `GROQ_API_KEY`, `CW_SUPABASE_SERVICE_ROLE_KEY`
 
 ### Step A: Extract completed-contract contact IDs
 
@@ -35,15 +35,20 @@ cd C:\Users\benelk\Documents\claimwarriors-claude-code-hub\src
 C:\Users\benelk\AppData\Local\Programs\Python\Python312\python.exe transcribe_calls.py --env-file C:\Users\benelk\Documents\claudeclaw\.env --contact-ids C:\Users\benelk\AppData\Local\Temp\ghl_completed_contract_contacts.txt --batch-size 50 --processed-ids C:\Users\benelk\AppData\Local\Temp\ghl_processed_ids.txt --processed-contacts C:\Users\benelk\AppData\Local\Temp\ghl_processed_contacts.txt
 ```
 
-The script outputs JSON lines to stdout. Each line is one transcribed call. Insert into Supabase using the MCP or pipe to a loader.
-
-**To insert results into Supabase:** The script prints JSON lines to stdout. Use the Supabase MCP `execute_sql` tool to insert each line, or redirect stdout to a file and batch-insert:
+The script outputs JSON lines to stdout. Each line is one transcribed call. Redirect stdout to a JSONL file:
 
 ```bash
 ... > C:\Users\benelk\AppData\Local\Temp\ghl_transcription_batch.jsonl
 ```
 
-Then read the JSONL file and insert each row into the `GHL Call Transcripts` table via Supabase MCP.
+**To insert results into Supabase:** Use the REST API insertion script (NOT the Supabase MCP `execute_sql` -- it has a ~3000 char query limit that truncates long transcripts):
+
+```bash
+cd C:\Users\benelk\Documents\claimwarriors-claude-code-hub\src
+C:\Users\benelk\AppData\Local\Programs\Python\Python312\python.exe supabase_insert.py --env-file C:\Users\benelk\Documents\claudeclaw\.env --jsonl C:\Users\benelk\AppData\Local\Temp\ghl_transcription_batch.jsonl
+```
+
+Requires `CW_SUPABASE_SERVICE_ROLE_KEY` in the .env file (get from Supabase dashboard > Project Settings > API > service_role key).
 
 ### Re-running is safe
 
@@ -70,9 +75,10 @@ Then read the JSONL file and insert each row into the `GHL Call Transcripts` tab
 Explored GHL API. Call recordings live under conversations > messages (TYPE_CALL). Recording download endpoint: `GET /conversations/messages/{messageId}/locations/{locationId}/recording`.
 
 ### Step 2: Build extraction script -- DONE
-Two scripts in `src/`:
+Three scripts in `src/`:
 - `extract_contract_contacts.py` -- pages through completed contracts, outputs contact IDs
 - `transcribe_calls.py` -- downloads recordings, transcribes via Groq Whisper, outputs JSONL
+- `supabase_insert.py` -- inserts JSONL transcripts into Supabase via REST API (bypasses MCP size limit)
 
 ### Step 3: Transcribe and store -- IN PROGRESS
 Pipeline proven end-to-end. Need to scale from 1 contact to all ~790 contracts worth of contacts.
