@@ -1,19 +1,19 @@
 ---
-name: cw-knowledge-base
+name: cw-insert-transcript
 description: |
-  Claim Warriors knowledge base creation pipeline. Extracts call recordings
+  Claim Warriors transcript insertion pipeline. Extracts call recordings
   from GoHighLevel for completed-contract customers, transcribes them via
   Groq Whisper, and inserts transcripts into Supabase.
 
   Use this skill when user says:
   - "run the transcription pipeline"
   - "transcribe CW calls"
-  - "run knowledge base extraction"
+  - "insert transcripts"
   - "run a batch of transcriptions"
   - "extract and transcribe calls"
 ---
 
-# CW Knowledge Base Pipeline
+# CW Insert Transcript Pipeline
 
 End-to-end pipeline: GHL completed contracts -> contact IDs -> call recordings -> Groq Whisper transcription -> Supabase storage.
 
@@ -27,7 +27,7 @@ End-to-end pipeline: GHL completed contracts -> contact IDs -> call recordings -
 
 ## How to Run
 
-When invoked, ask the user for a batch size (default 50) and then execute all three phases in sequence. Do not stop between phases unless there's an error.
+When invoked, ask the user for a batch size (default 10). The batch size represents the number of **unique contacts** to process -- all calls for each contact are transcribed. Then execute all three phases in sequence. Do not stop between phases unless there's an error.
 
 ### Phase 1: Extract Contact IDs
 
@@ -43,7 +43,7 @@ After Phase 1 completes, report how many unique contact IDs were extracted.
 
 ### Phase 2: Transcribe Calls
 
-Run the transcription pipeline with the requested batch size. The script outputs JSON lines to stdout -- one per transcribed call.
+Run the transcription pipeline with the requested batch size. The batch size controls how many **contacts** to process -- all calls for each contact are transcribed regardless of count.
 
 ```bash
 cd C:\Users\benelk\Documents\claimwarriors-claude-code-hub\src && C:\Users\benelk\AppData\Local\Programs\Python\Python312\python.exe transcribe_calls.py --env-file C:\Users\benelk\Documents\claudeclaw\.env --contact-ids C:\Users\benelk\AppData\Local\Temp\ghl_completed_contract_contacts.txt --batch-size <BATCH_SIZE> --processed-ids C:\Users\benelk\AppData\Local\Temp\ghl_processed_ids.txt --processed-contacts C:\Users\benelk\AppData\Local\Temp\ghl_processed_contacts.txt > C:\Users\benelk\AppData\Local\Temp\ghl_transcription_batch.jsonl
@@ -55,7 +55,7 @@ Progress logs go to stderr (visible in terminal). The script handles:
 - Skipping already-processed messages (via processed-ids file)
 - Deleting WAV files after transcription
 
-After Phase 2 completes, report how many calls were transcribed.
+After Phase 2 completes, report how many contacts were processed and total calls transcribed.
 
 ### Phase 3: Insert into Supabase
 
@@ -78,7 +78,7 @@ After Phase 3, report:
 
 Everything is resumable. Re-running the skill:
 - Phase 1: Re-extracts the full contact list (fast, ~1-2 min)
-- Phase 2: Skips already-processed messages via tracking files
+- Phase 2: Skips already-processed messages and contacts via tracking files
 - Phase 3: Supabase dedup via ON CONFLICT on ghl_message_id (ignore-duplicates)
 
 ## Tracking Files

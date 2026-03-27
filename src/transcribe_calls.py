@@ -186,7 +186,7 @@ def main():
         "--batch-size",
         type=int,
         default=10,
-        help="Number of calls to transcribe per run (default: 10)",
+        help="Number of unique contacts to process per run (default: 10). All calls for each contact are transcribed.",
     )
     parser.add_argument(
         "--processed-ids",
@@ -227,9 +227,10 @@ def main():
     skipped_count = 0
     error_count = 0
     contacts_scanned = 0
+    contacts_processed = 0
 
     for contact_id in all_contact_ids:
-        if transcribed_count >= args.batch_size:
+        if contacts_processed >= args.batch_size:
             break
 
         # Skip contacts we've fully processed
@@ -268,7 +269,7 @@ def main():
         last_msg_id = None
         has_more = True
 
-        while has_more and transcribed_count < args.batch_size:
+        while has_more:
             try:
                 messages, has_more, last_msg_id = fetch_call_messages(
                     ghl_key, convo_id, last_msg_id
@@ -284,9 +285,6 @@ def main():
                 break
 
             for msg in messages:
-                if transcribed_count >= args.batch_size:
-                    break
-
                 msg_id = msg["id"]
                 call_meta = msg.get("meta", {}).get("call", {})
                 call_status = call_meta.get("status", "")
@@ -310,7 +308,7 @@ def main():
                 contact_had_new_calls = True
                 tmp_wav = os.path.join(tempfile.gettempdir(), f"ghl_{msg_id}.wav")
                 try:
-                    log(f"  [{transcribed_count + 1}/{args.batch_size}] {msg_id} ({duration}s, {direction})")
+                    log(f"  [call {transcribed_count + 1}] {msg_id} ({duration}s, {direction})")
                     has_recording = download_recording(ghl_key, msg_id, tmp_wav)
 
                     if not has_recording:
@@ -358,19 +356,21 @@ def main():
 
             time.sleep(0.5)
 
-        # If we processed all messages for this contact and didn't hit batch limit,
-        # mark the contact as fully done
-        if not has_more and transcribed_count < args.batch_size:
+        # Mark this contact as fully done (all their calls processed)
+        if not has_more:
             if args.processed_contacts:
                 with open(args.processed_contacts, "a") as f:
                     f.write(contact_id + "\n")
             processed_contact_ids.add(contact_id)
+            contacts_processed += 1
+            log(f"  Contact done ({contacts_processed}/{args.batch_size})")
 
         time.sleep(0.3)
 
     log(f"\n--- Summary ---")
-    log(f"Contacts scanned: {contacts_scanned}")
-    log(f"Calls transcribed: {transcribed_count}")
+    log(f"Contacts processed: {contacts_processed}/{args.batch_size}")
+    log(f"Contacts scanned (incl. skipped): {contacts_scanned}")
+    log(f"Total calls transcribed: {transcribed_count}")
     log(f"Calls skipped (voicemail/no-answer/already done): {skipped_count}")
     log(f"Errors: {error_count}")
 
