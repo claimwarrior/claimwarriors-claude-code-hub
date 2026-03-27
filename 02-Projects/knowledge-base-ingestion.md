@@ -110,6 +110,10 @@ Mark Kashef and Matthew Snow recommended labeling 20-30% of calls before process
 - **Original target**: Thursday March 27, 2026
 - **Revised**: Pipeline needs to be built first. Realistic: extraction pipeline this week, first script outputs early next week
 
+## Operational Runbook
+
+For the hands-on "how to run it" guide with exact commands, current status, and Supabase schema, see [[knowledge-base-creation]].
+
 ## Source
 
 - Ben/Jo call, March 24 2026 -- "AI Next Steps"
