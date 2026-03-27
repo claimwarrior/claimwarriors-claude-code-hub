@@ -23,7 +23,7 @@ Run once (or re-run to refresh). Outputs one contact ID per line to stdout.
 
 ```bash
 cd C:\Users\benelk\Documents\claimwarriors-claude-code-hub\src
-C:\Users\benelk\AppData\Local\Programs\Python\Python312\python.exe extract_contract_contacts.py "Bearer pit-c49ab4a1-26c2-42de-82f4-61dcbba2eb4f" > C:\Users\benelk\AppData\Local\Temp\ghl_completed_contract_contacts.txt
+C:\Users\benelk\AppData\Local\Programs\Python\Python312\python.exe extract_contract_contacts.py "$CLAIM_WARRIOR_GHL_API_KEY" > C:\Users\benelk\AppData\Local\Temp\ghl_completed_contract_contacts.txt
 ```
 
 This pages through the GHL Documents API (`GET /proposals/document?status[]=completed`) and extracts recipient contact IDs. As of March 26, 2026: 790 completed contracts.
