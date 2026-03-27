@@ -2,8 +2,8 @@
 GHL Call Recording Transcription Pipeline
 ==========================================
 
-Downloads call recordings from GoHighLevel and transcribes them via Groq Whisper.
-Outputs JSON results to stdout for insertion into Supabase via MCP.
+Downloads call recordings from GoHighLevel and transcribes them locally
+using OpenAI Whisper. No API rate limits.
 
 Only processes contacts with completed contracts.
 Only processes completed calls (no voicemails).
@@ -17,7 +17,7 @@ The script:
 3. Fetches TYPE_CALL messages from that conversation
 4. Skips voicemails and non-completed calls
 5. Downloads the recording WAV for completed calls
-6. Transcribes via Groq Whisper
+6. Transcribes locally via Whisper (small.en model)
 7. Outputs JSON lines to stdout (one per transcribed call)
 8. Deletes the local WAV after transcription
 
@@ -37,16 +37,23 @@ Each output line is a JSON object:
 import argparse
 import json
 import os
+import ssl
 import sys
 import tempfile
 import time
 import requests
 
+# Workaround for SSL cert issues when loading Whisper model
+ssl._create_default_https_context = ssl._create_unverified_context
+import whisper
+
 
 GHL_API_BASE = "https://services.leadconnectorhq.com"
 GHL_API_VERSION = "2021-07-28"
-GROQ_API_BASE = "https://api.groq.com/openai/v1"
 LOCATION_ID = "L58ZxauomnryKcGf1IjZ"
+SUPABASE_URL = "https://upbbqaqnegncoetxuhwk.supabase.co"
+SUPABASE_TABLE = "GHL Call Transcripts"
+WHISPER_MODEL = None  # Loaded once at startup
 
 
 def load_env(env_file):
@@ -125,44 +132,80 @@ def fetch_call_messages(api_key, conversation_id, last_message_id=None):
     )
 
 
-def download_recording(api_key, message_id, output_path):
-    """Download call recording WAV from GHL."""
+def download_recording(api_key, message_id, output_path, max_retries=3):
+    """Download call recording WAV from GHL with retry."""
     url = f"{GHL_API_BASE}/conversations/messages/{message_id}/locations/{LOCATION_ID}/recording"
-    resp = requests.get(url, headers=ghl_headers(api_key), stream=True)
-    if resp.status_code == 404:
-        return False
-    resp.raise_for_status()
+    for attempt in range(max_retries):
+        try:
+            resp = requests.get(url, headers=ghl_headers(api_key), stream=True)
+            if resp.status_code == 404:
+                return False
+            if resp.status_code == 422:
+                return False
+            if resp.status_code == 429:
+                wait = int(resp.headers.get("Retry-After", 15 * (attempt + 1)))
+                log(f"    GHL 429, waiting {wait}s (attempt {attempt + 1}/{max_retries})...")
+                time.sleep(wait)
+                continue
+            resp.raise_for_status()
 
-    content_type = resp.headers.get("content-type", "")
-    if "audio" not in content_type and "octet-stream" not in content_type:
-        return False
+            content_type = resp.headers.get("content-type", "")
+            if "audio" not in content_type and "octet-stream" not in content_type:
+                return False
 
-    with open(output_path, "wb") as f:
-        for chunk in resp.iter_content(chunk_size=8192):
-            f.write(chunk)
+            with open(output_path, "wb") as f:
+                for chunk in resp.iter_content(chunk_size=8192):
+                    f.write(chunk)
 
-    # Verify file has actual content
-    if os.path.getsize(output_path) < 1000:
-        return False
+            # Verify file has actual content
+            if os.path.getsize(output_path) < 1000:
+                return False
 
-    return True
+            return True
+        except requests.exceptions.ConnectionError:
+            wait = 10 * (attempt + 1)
+            log(f"    GHL connection error, waiting {wait}s (attempt {attempt + 1}/{max_retries})...")
+            time.sleep(wait)
+    return False
 
 
-def transcribe_with_groq(groq_key, audio_path):
-    """Transcribe audio file using Groq Whisper API."""
-    with open(audio_path, "rb") as f:
-        resp = requests.post(
-            f"{GROQ_API_BASE}/audio/transcriptions",
-            headers={"Authorization": f"Bearer {groq_key}"},
-            files={"file": ("recording.wav", f, "audio/wav")},
-            data={
-                "model": "whisper-large-v3",
-                "response_format": "json",
-                "language": "en",
-            },
-        )
-    resp.raise_for_status()
-    return resp.json().get("text", "")
+def insert_to_supabase(service_key, row):
+    """Insert a single transcript row into Supabase. Returns True if inserted."""
+    headers = {
+        "apikey": service_key,
+        "Authorization": f"Bearer {service_key}",
+        "Content-Type": "application/json",
+        "Prefer": "resolution=ignore-duplicates,return=minimal",
+    }
+    resp = requests.post(
+        f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}",
+        headers=headers,
+        json=row,
+    )
+    if resp.status_code in (200, 201):
+        return True
+    if resp.status_code == 409:
+        log(f"    Supabase: duplicate, skipped")
+        return True
+    log(f"    Supabase insert error {resp.status_code}: {resp.text[:200]}")
+    return False
+
+
+def load_whisper_model():
+    """Load Whisper model once (cached globally)."""
+    global WHISPER_MODEL
+    if WHISPER_MODEL is None:
+        log("Loading Whisper small.en model...")
+        WHISPER_MODEL = whisper.load_model("small.en")
+        log("Whisper model loaded.")
+    return WHISPER_MODEL
+
+
+def transcribe_local(audio_path):
+    """Transcribe audio file using local Whisper model."""
+    model = load_whisper_model()
+    result = model.transcribe(audio_path, language="en", fp16=False)
+    return result.get("text", "")
 
 
 def log(msg):
@@ -203,14 +246,17 @@ def main():
     # Load config
     env = load_env(args.env_file)
     ghl_key = env.get("CLAIM_WARRIOR_GHL_API_KEY")
-    groq_key = env.get("GROQ_API_KEY")
+    supabase_key = env.get("CW_SUPABASE_SERVICE_ROLE_KEY")
 
     if not ghl_key:
         log("ERROR: CLAIM_WARRIOR_GHL_API_KEY not found in .env")
         sys.exit(1)
-    if not groq_key:
-        log("ERROR: GROQ_API_KEY not found in .env")
+    if not supabase_key:
+        log("ERROR: CW_SUPABASE_SERVICE_ROLE_KEY not found in .env")
         sys.exit(1)
+
+    # Pre-load Whisper model before processing
+    load_whisper_model()
 
     # Load contact IDs (completed contracts only)
     all_contact_ids = []
@@ -319,7 +365,7 @@ def main():
                         continue
 
                     log(f"    Transcribing...")
-                    transcript = transcribe_with_groq(groq_key, tmp_wav)
+                    transcript = transcribe_local(tmp_wav)
 
                     result = {
                         "ghl_message_id": msg_id,
@@ -331,21 +377,19 @@ def main():
                         "call_status": "completed",
                         "transcript": transcript,
                     }
-                    print(json.dumps(result), flush=True)
+
+                    # Insert directly into Supabase
+                    inserted = insert_to_supabase(supabase_key, result)
+                    if inserted:
+                        log(f"    Inserted into Supabase ({len(transcript)} chars)")
+                    else:
+                        log(f"    WARNING: Supabase insert failed, saving to stdout as backup")
+                        print(json.dumps(result), flush=True)
 
                     processed_msg_ids.add(msg_id)
                     save_processed_id(args.processed_ids, msg_id)
                     transcribed_count += 1
-                    log(f"    Done ({len(transcript)} chars)")
 
-                except requests.exceptions.HTTPError as e:
-                    log(f"    HTTP error: {e}")
-                    error_count += 1
-                    if e.response and e.response.status_code == 429:
-                        retry_after = int(e.response.headers.get("Retry-After", 60))
-                        log(f"    Rate limited. Waiting {retry_after}s...")
-                        time.sleep(retry_after)
-                    continue
                 except Exception as e:
                     log(f"    Error: {e}")
                     error_count += 1

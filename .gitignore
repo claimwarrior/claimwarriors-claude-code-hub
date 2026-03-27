@@ -9,6 +9,8 @@
 *.sln
 *.sw?
 
+pipeline_data
+
 # Environment files
 .env
 .env.local

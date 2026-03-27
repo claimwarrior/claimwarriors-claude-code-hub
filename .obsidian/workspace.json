@@ -1,24 +1,24 @@
 {
   "main": {
-    "id": "2ee26688c78d3c14",
+    "id": "b228203ce2fb52c6",
     "type": "split",
     "children": [
       {
-        "id": "124ac587a7f54fdc",
+        "id": "a02909ae055ceb6b",
         "type": "tabs",
         "children": [
           {
-            "id": "77772089dc72ee04",
+            "id": "eece48171db8664e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01-AI-Strategy/roadmap.md",
+                "file": "01-AI-Strategy/implementation-plan.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "roadmap"
+              "title": "implementation-plan"
             }
           }
         ]
@@ -27,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "ee19da35c0d7bf73",
+    "id": "2638068a17904f80",
     "type": "split",
     "children": [
       {
-        "id": "0a9692494ba91c2c",
+        "id": "b6e60d67f3e9f3b9",
         "type": "tabs",
         "children": [
           {
-            "id": "d20ae08f64c29d88",
+            "id": "d30a93d6ab039d21",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,7 +48,7 @@
             }
           },
           {
-            "id": "87cbb96fa99cfa35",
+            "id": "7baaf304a3302440",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -65,7 +65,7 @@
             }
           },
           {
-            "id": "ea5082bb43287ac8",
+            "id": "3f05f3e8f4b9559e",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -81,20 +81,20 @@
     "width": 300
   },
   "right": {
-    "id": "77076d399d182d14",
+    "id": "4b50fe47fdbe1a27",
     "type": "split",
     "children": [
       {
-        "id": "605fec98bbf7eeb0",
+        "id": "231e8017f8365a47",
         "type": "tabs",
         "children": [
           {
-            "id": "312ad934b1a3bde2",
+            "id": "6311371435d00a81",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "01-AI-Strategy/roadmap.md",
+                "file": "01-AI-Strategy/implementation-plan.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,25 +104,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for roadmap"
+              "title": "Backlinks for implementation-plan"
             }
           },
           {
-            "id": "d95345d08300dec6",
+            "id": "c2dcaba403f2e2a8",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "01-AI-Strategy/roadmap.md",
+                "file": "01-AI-Strategy/implementation-plan.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from roadmap"
+              "title": "Outgoing links from implementation-plan"
             }
           },
           {
-            "id": "5a890d3a5f7be726",
+            "id": "ec3c8a713df643d5",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -137,7 +137,7 @@
             }
           },
           {
-            "id": "a3629566c2dc11cf",
+            "id": "5a85789b4b2d4570",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -151,18 +151,18 @@
             }
           },
           {
-            "id": "2c4c89a5d741cb60",
+            "id": "fdd961f843ae6d56",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "01-AI-Strategy/roadmap.md",
+                "file": "01-AI-Strategy/implementation-plan.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of roadmap"
+              "title": "Outline of implementation-plan"
             }
           }
         ]
@@ -183,40 +183,43 @@
       "bases:Create new base": false
     }
   },
-  "active": "77772089dc72ee04",
+  "active": "eece48171db8664e",
   "lastOpenFiles": [
+    "pipeline_data/m1_worker_1_processed_contacts.txt",
+    "pipeline_data/m1_worker_0_processed_msgs.txt",
+    "pipeline_data/m1_worker_3_processed_msgs.txt",
+    "pipeline_data/m1_worker_2_processed_msgs.txt",
+    "pipeline_data/m1_worker_1_processed_msgs.txt",
+    "pipeline_data/m1_worker_3_output.jsonl",
+    "pipeline_data/logs/m1_worker_3_round_1.log",
+    "pipeline_data/m1_worker_2_output.jsonl",
+    "pipeline_data/logs/m1_worker_2_round_1.log",
+    "pipeline_data/m1_worker_1_output.jsonl",
+    "pipeline_data/logs/m1_worker_1_round_1.log",
+    "02-Projects/knowledge-base-creation.md",
+    "00-Company/front-office.md",
+    "00-Company/claim-types.md",
     "01-AI-Strategy/implementation-plan.md",
-    "CLAUDE.md",
-    "06-Meeting-Notes/2026-03-25-ben-jo-ai-implementation-details.md",
-    "06-Meeting-Notes/2026-03-24-ben-jo-ai-next-steps.md",
-    "05-Decisions/2026-03-24-claude-claw-over-openclaw.md",
+    "02-Projects/knowledge-base-ingestion.md",
     "04-Scripts/_index.md",
-    "03-Integrations/slack.md",
-    "03-Integrations/ringcentral.md",
-    "03-Integrations/fireflies-mcp.md",
-    "03-Integrations/outlook-mcp.md",
-    "03-Integrations/supabase-mcp.md",
+    "05-Decisions/2026-03-24-claude-claw-over-openclaw.md",
     "03-Integrations/airtable-mcp.md",
-    "03-Integrations/ghl-mcp.md",
-    "02-Projects/_backlog.md",
-    "02-Projects/image-analysis.md",
-    "02-Projects/back-office-claim-verifier.md",
     "02-Projects/ai-customer-service-rep.md",
     "01-AI-Strategy/vision.md",
     "01-AI-Strategy/roadmap.md",
-    "01-AI-Strategy/principles.md",
-    "00-Company/about-claim-warriors.md",
     "00-Company/back-office.md",
-    "00-Company/claim-types.md",
-    "00-Company/front-office.md",
+    "01-AI-Strategy/principles.md",
     "00-Company/tools-and-platforms.md",
-    "02-Projects/knowledge-base-ingestion.md",
-    "06-Meeting-Notes",
-    "05-Decisions",
-    "04-Scripts",
-    "03-Integrations",
-    "02-Projects",
-    "01-AI-Strategy",
-    "00-Company"
+    "00-Company/about-claim-warriors.md",
+    "03-Integrations/ghl-mcp.md",
+    "CLAUDE.md",
+    "06-Meeting-Notes/2026-03-24-ben-jo-ai-next-steps.md",
+    "06-Meeting-Notes/2026-03-25-ben-jo-ai-implementation-details.md",
+    "03-Integrations/supabase-mcp.md",
+    "03-Integrations/slack.md",
+    "03-Integrations/ringcentral.md",
+    "03-Integrations/outlook-mcp.md",
+    "03-Integrations/fireflies-mcp.md",
+    "02-Projects/live-call-listener.md"
   ]
 }
