@@ -181,7 +181,7 @@ def main():
             p = subprocess.Popen(
                 [
                     sys.executable,
-                    os.path.join(script_dir, "transcribe_calls.py"),
+                    os.path.join(script_dir, "fetch_call_transcripts.py"),
                     "--env-file", env_file,
                     "--contact-ids", contacts_file,
                     "--batch-size", str(args.calls_per_round),

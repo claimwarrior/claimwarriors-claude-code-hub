@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "a02909ae055ceb6b",
+        "id": "f368514958a9ef65",
         "type": "tabs",
         "children": [
           {
-            "id": "eece48171db8664e",
+            "id": "ef8e202e75f4653d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01-AI-Strategy/implementation-plan.md",
+                "file": "02-Projects/knowledge-base-creation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "implementation-plan"
+              "title": "knowledge-base-creation"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "01-AI-Strategy/implementation-plan.md",
+                "file": "02-Projects/knowledge-base-creation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for implementation-plan"
+              "title": "Backlinks for knowledge-base-creation"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "01-AI-Strategy/implementation-plan.md",
+                "file": "02-Projects/knowledge-base-creation.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from implementation-plan"
+              "title": "Outgoing links from knowledge-base-creation"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "01-AI-Strategy/implementation-plan.md",
+                "file": "02-Projects/knowledge-base-creation.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of implementation-plan"
+              "title": "Outline of knowledge-base-creation"
             }
           }
         ]
@@ -183,43 +183,43 @@
       "bases:Create new base": false
     }
   },
-  "active": "eece48171db8664e",
+  "active": "ef8e202e75f4653d",
   "lastOpenFiles": [
-    "pipeline_data/m1_worker_1_processed_contacts.txt",
-    "pipeline_data/m1_worker_0_processed_msgs.txt",
-    "pipeline_data/m1_worker_3_processed_msgs.txt",
-    "pipeline_data/m1_worker_2_processed_msgs.txt",
-    "pipeline_data/m1_worker_1_processed_msgs.txt",
-    "pipeline_data/m1_worker_3_output.jsonl",
-    "pipeline_data/logs/m1_worker_3_round_1.log",
-    "pipeline_data/m1_worker_2_output.jsonl",
-    "pipeline_data/logs/m1_worker_2_round_1.log",
-    "pipeline_data/m1_worker_1_output.jsonl",
-    "pipeline_data/logs/m1_worker_1_round_1.log",
-    "02-Projects/knowledge-base-creation.md",
-    "00-Company/front-office.md",
-    "00-Company/claim-types.md",
-    "01-AI-Strategy/implementation-plan.md",
-    "02-Projects/knowledge-base-ingestion.md",
-    "04-Scripts/_index.md",
-    "05-Decisions/2026-03-24-claude-claw-over-openclaw.md",
-    "03-Integrations/airtable-mcp.md",
-    "02-Projects/ai-customer-service-rep.md",
-    "01-AI-Strategy/vision.md",
-    "01-AI-Strategy/roadmap.md",
-    "00-Company/back-office.md",
-    "01-AI-Strategy/principles.md",
-    "00-Company/tools-and-platforms.md",
-    "00-Company/about-claim-warriors.md",
-    "03-Integrations/ghl-mcp.md",
-    "CLAUDE.md",
-    "06-Meeting-Notes/2026-03-24-ben-jo-ai-next-steps.md",
-    "06-Meeting-Notes/2026-03-25-ben-jo-ai-implementation-details.md",
-    "03-Integrations/supabase-mcp.md",
-    "03-Integrations/slack.md",
-    "03-Integrations/ringcentral.md",
-    "03-Integrations/outlook-mcp.md",
-    "03-Integrations/fireflies-mcp.md",
-    "02-Projects/live-call-listener.md"
+    "04-Scripts/few-shot-examples.md",
+    "04-Scripts/intake-new-underpaid.md",
+    "04-Scripts/intake-denied.md",
+    "04-Scripts/rating-signals.md",
+    "04-Scripts/qualification-sequences.md",
+    "04-Scripts/objection-response-pairs.md",
+    "04-Scripts/conversation-archetypes.md",
+    "pipeline_data/reports/batch_26.md",
+    "pipeline_data/reports/batch_27.md",
+    "pipeline_data/reports/batch_18.md",
+    "pipeline_data/reports/batch_24.md",
+    "pipeline_data/reports/batch_22.md",
+    "pipeline_data/reports/batch_25.md",
+    "pipeline_data/reports/batch_23.md",
+    "pipeline_data/reports/batch_28.md",
+    "pipeline_data/reports/batch_19.md",
+    "pipeline_data/reports/batch_17.md",
+    "pipeline_data/reports/batch_21.md",
+    "pipeline_data/reports/batch_16.md",
+    "pipeline_data/reports/batch_20.md",
+    "pipeline_data/reports/batch_10.md",
+    "pipeline_data/reports/batch_14.md",
+    "pipeline_data/reports/batch_15.md",
+    "pipeline_data/reports/batch_07.md",
+    "pipeline_data/reports/batch_09.md",
+    "pipeline_data/reports/batch_11.md",
+    "pipeline_data/reports",
+    "src/aggregate_extractions.py",
+    "src/__pycache__/extract_patterns.cpython-311.pyc",
+    "src/__pycache__",
+    "pipeline_data/extraction_worker_7.log",
+    "pipeline_data/extraction_worker_6.log",
+    "pipeline_data/extraction_worker_5.log",
+    "pipeline_data/extraction_worker_4.log",
+    "pipeline_data/extraction_worker_3.log",
+    "pipeline_data/extraction_worker_2.log"
   ]
 }

@@ -1,49 +1,43 @@
 # Scripts
 
-This folder contains AI-generated intake and communication scripts for Claim Warriors.
+This folder contains AI-generated intake scripts, qualification frameworks, and reference materials for Claim Warriors. All content synthesized from 2,800+ successful sales calls (28 batch reports).
 
-## How Scripts Are Generated
+## How Scripts Were Generated
 
-1. Call recordings are extracted from GHL (788+ completed contracts)
-2. Transcribed with Whisper or Groq (not GHL's built-in transcriber)
-3. Batched through Gemini Flash (20-30 transcripts per batch) to mine specific patterns against a defined rubric
-4. Claude synthesizes extracted patterns into archetypes, objection/response pairs, and few-shot examples
-5. Scripts are generated grounded in real CW call patterns
-6. Jo reviews each script and provides feedback
-7. Approved scripts are used by AI agents (intake bot, outreach bot) and human reps
+1. Call recordings extracted from GHL (788+ completed contracts)
+2. Transcribed with Whisper/Groq
+3. Batched through Gemini Flash to mine specific patterns against a defined extraction rubric
+4. Claude synthesized extracted patterns into archetypes, objection/response pairs, and few-shot examples
+5. Scripts generated grounded in real CW call patterns
+6. **Status**: Generated. Awaiting Jo's review and feedback.
 
-## Script Structure
+## Files in This Folder
 
-Two intake scripts, each with claim-type-specific branches:
+### Foundation Documents (read these first)
+- **[[conversation-archetypes]]** -- 5 distinct conversation patterns that cover ~100% of CW calls
+- **[[objection-response-pairs]]** -- 12 objection types ranked by frequency, with real rep quotes and resolution rates
+- **[[qualification-sequences]]** -- Question sequences per claim type (water/roof/fire/misc) in the order top reps actually use
+- **[[rating-signals]]** -- Framework for scoring leads, calls, and claims (1-10 scales + hard disqualifiers)
+- **[[few-shot-examples]]** -- 24 real call excerpts for embedding in AI agent prompts
 
-### Script A: Denied Claim Intake
-Handed off to: Low-Level Rep ($10-$12/hr)
-Goal: Sign at 15%-20%
-
-For customers whose insurance company has denied their claim. The more transactional path. Covers:
-- Acknowledging frustration, assessing if denial is worth fighting
-- Denied-claim-specific qualification questions
-- Objection handling for denied scenarios
-- Claim-type branches (water/fire/roof/misc) for type-specific details and red flags
-
-**File**: `intake-denied.md` (TBD -- pending knowledge base completion)
-
-### Script B: New or Underpaid Claim Intake
-Handed off to: Sam / Account Manager ($25/hr)
-Goal: Sign claim + sales valuation
-
-For customers with a fresh claim or insurance underpayment. The more complex path -- requires assessing claim value and building a case for CW involvement. Covers:
-- Assessing the gap between payout and actual damage value
-- Performing sales valuation (what is CW's potential fee?)
-- New/underpaid-specific qualification questions
-- Objection handling for underpayment scenarios
-- Claim-type branches (water/fire/roof/misc) for type-specific details and red flags
-
-**File**: `intake-new-underpaid.md` (TBD -- pending knowledge base completion)
+### Intake Scripts
+- **[[intake-denied]]** -- Script A: Denied claim intake. For low-level rep ($10-12/hr). Goal: sign at 15-20%.
+- **[[intake-new-underpaid]]** -- Script B: New/underpaid claim intake. For Sam / Account Manager ($25/hr). Goal: sign + sales valuation. Includes sales valuation cheat sheet.
 
 ## Why Two Scripts, Not Nine
 
 The claim STATUS (denied vs. new/underpaid) drives the conversation structure -- the customer's emotional state, objections, and qualification path are fundamentally different. The claim TYPE (water, fire, roof, misc) adds context within each script but doesn't change the core flow. Separate sections inside each script handle type-specific details.
+
+## How to Use These
+
+### For Human Reps
+Read the script matching your role. Reference the objection-response pairs and few-shot examples as training material. The scripts are structured as a conversation flow — follow the phases in order.
+
+### For AI Agents
+Load the relevant script as the primary prompt. Embed 3-5 few-shot examples from [[few-shot-examples]] to set the tone. Use [[rating-signals]] for post-call scoring. Use [[qualification-sequences]] for type-specific question logic.
+
+### For Jo's Review
+Start with [[conversation-archetypes]] to see if the patterns ring true. Then read both intake scripts. The question to answer: "Does this sound like how my best rep talks?"
 
 ## Additional Script Types (Future)
 
@@ -55,8 +49,8 @@ For the denied claims outreach bot to re-contact ~796 unsigned leads. Different 
 
 ## Status
 
-**Not yet generated.** Waiting on:
-- [ ] Knowledge base ingestion (Deliverable 1)
-- [ ] Pattern extraction pipeline (Gemini Flash batches)
-- [ ] Claude synthesis pass
+- [x] Knowledge base ingestion (Deliverable 1)
+- [x] Pattern extraction pipeline (Gemini Flash batches — 28 batches, 2,800+ calls)
+- [x] Claude synthesis pass
 - [ ] Jo's review and feedback
+- [ ] Iterate scripts based on feedback
